@@ -112,7 +112,7 @@ APP_BASE_URL=http://localhost:4001
 DATABASE_URL=postgresql://progress_user:progress_pass@localhost:5433/progress_reports?schema=public
 REDIS_URL=redis://localhost:6379
 
-GEMINI_API_KEY=AIzaSyBCYh7tf-IaYfXAQlcuj486oqPi7uXPbzI
+GEMINI_API_KEY=your_api_key
 GEMINI_MODEL=gemini-2.0-flash
 
 REPORT_TIMEZONE=Asia/Kolkata
