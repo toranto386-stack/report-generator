@@ -1,0 +1,50 @@
+{
+  "name": "Agent 1 - LMS Data Ingestion",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "lms-progress-ingest",
+        "httpMethod": "POST",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "WebhookIn",
+      "name": "LMS Webhook In",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const event = $json;\nconst kind = event.kind;\nconst base = event.backendBaseUrl || 'http://host.docker.internal:4001';\nconst map = {\n  attendance: '/ingest/attendance',\n  assignment_score: '/ingest/assignment-score',\n  doubt: '/ingest/doubt',\n  project_milestone: '/ingest/project-milestone'\n};\nif (!map[kind]) throw new Error(`Unsupported LMS event kind: ${kind}`);\nreturn [{ json: { url: `${base}${map[kind]}`, payload: event.payload } }];"
+      },
+      "id": "NormalizeEvent",
+      "name": "Normalize LMS Event",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [520, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$json.url}}",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{$json.payload}}",
+        "options": {}
+      },
+      "id": "SendToBackend",
+      "name": "Send to Backend Database API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [780, 300]
+    }
+  ],
+  "connections": {
+    "LMS Webhook In": { "main": [[{ "node": "Normalize LMS Event", "type": "main", "index": 0 }]] },
+    "Normalize LMS Event": { "main": [[{ "node": "Send to Backend Database API", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" },
+  "versionId": "agent-1-lms-ingestion"
+}

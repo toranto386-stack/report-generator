@@ -1,0 +1,11 @@
+{
+  "kind": "attendance",
+  "backendBaseUrl": "http://host.docker.internal:4001",
+  "payload": {
+    "studentEmail": "pooja@example.com",
+    "sessionAt": "2026-05-03T13:00:00.000Z",
+    "present": true,
+    "minutes": 90,
+    "topic": "HTTP Request nodes"
+  }
+}

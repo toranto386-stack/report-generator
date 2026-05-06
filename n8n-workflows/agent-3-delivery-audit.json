@@ -1,0 +1,50 @@
+{
+  "name": "Agent 3 - Delivery Audit and Parent Visibility",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      },
+      "id": "HourlyTrigger",
+      "name": "Hourly Delivery Check",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://host.docker.internal:4001/reports",
+        "options": {}
+      },
+      "id": "GetReports",
+      "name": "Get Report Delivery Status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const failed = $json.filter ? $json.filter(r => r.deliveryStatus === 'FAILED') : [];\nreturn failed.map(report => ({ json: report }));"
+      },
+      "id": "FilterFailed",
+      "name": "Find Failed Deliveries",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [780, 300]
+    }
+  ],
+  "connections": {
+    "Hourly Delivery Check": { "main": [[{ "node": "Get Report Delivery Status", "type": "main", "index": 0 }]] },
+    "Get Report Delivery Status": { "main": [[{ "node": "Find Failed Deliveries", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "timezone": "Asia/Kolkata", "executionOrder": "v1" },
+  "versionId": "agent-3-delivery-audit"
+}

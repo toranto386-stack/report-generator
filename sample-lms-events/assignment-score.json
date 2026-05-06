@@ -1,0 +1,12 @@
+{
+  "kind": "assignment_score",
+  "backendBaseUrl": "http://host.docker.internal:4001",
+  "payload": {
+    "studentEmail": "pooja@example.com",
+    "title": "Error Handling Patterns",
+    "topic": "Error handling patterns",
+    "score": 16,
+    "maxScore": 20,
+    "submittedAt": "2026-05-04T13:00:00.000Z"
+  }
+}

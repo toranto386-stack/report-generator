@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "pathpilot-reports-frontend": "file:.."
+  }
+}

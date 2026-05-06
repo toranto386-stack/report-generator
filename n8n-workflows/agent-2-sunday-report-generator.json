@@ -1,0 +1,54 @@
+{
+  "name": "Agent 2 - Sunday Weekly Report Generator",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtDay": [0],
+              "triggerAtHour": 18,
+              "triggerAtMinute": 0
+            }
+          ]
+        }
+      },
+      "id": "SundayTrigger",
+      "name": "Sunday 6 PM Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [260, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:4001/reports/enqueue",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "x-scheduler-secret",
+              "value": "CHANGE_TO_YOUR_SCHEDULER_SECRET"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{}",
+        "options": {}
+      },
+      "id": "QueueReports",
+      "name": "Queue Weekly Reports",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [540, 300]
+    }
+  ],
+  "connections": {
+    "Sunday 6 PM Trigger": { "main": [[{ "node": "Queue Weekly Reports", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "timezone": "Asia/Kolkata", "executionOrder": "v1" },
+  "versionId": "agent-2-sunday-report-generator"
+}
